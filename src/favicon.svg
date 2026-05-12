@@ -1,0 +1,23 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2563EB"/>
+      <stop offset="100%" stop-color="#6D28D9"/>
+    </linearGradient>
+    <linearGradient id="bar3" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0.6"/>
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="64" height="64" rx="14" fill="url(#bg)"/>
+  <!-- Ascending bar chart -->
+  <rect x="9"  y="42" width="10" height="14" rx="2.5" fill="white" fill-opacity="0.45"/>
+  <rect x="23" y="33" width="10" height="23" rx="2.5" fill="white" fill-opacity="0.7"/>
+  <rect x="37" y="22" width="10" height="34" rx="2.5" fill="white"/>
+  <!-- Trend line from bar 1 top to target -->
+  <path d="M11 41 L28 32 L42 21 L53 13" stroke="#FBBF24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Goal target / bullseye -->
+  <circle cx="53" cy="13" r="6.5" stroke="#FBBF24" stroke-width="2" fill="rgba(251,191,36,0.18)"/>
+  <circle cx="53" cy="13" r="2.5" fill="#FBBF24"/>
+</svg>
