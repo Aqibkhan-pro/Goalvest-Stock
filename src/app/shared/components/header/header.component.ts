@@ -98,7 +98,7 @@ import { RealTimeService } from '../../../core/services/realtime.service';
               {{ theme.isDark() ? 'Light Mode' : 'Dark Mode' }}
             </button>
             <div class="menu-divider"></div>
-            <button class="menu-item danger" (click)="auth.logout()">
+            <button class="menu-item danger" (click)="auth.logout(); showMenu.set(false)">
               <span class="material-icons">logout</span> Sign Out
             </button>
           </div>

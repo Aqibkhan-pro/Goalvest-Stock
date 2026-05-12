@@ -1,45 +1,54 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import { Router } from '@angular/router';
-
-const DEMO_EMAIL    = 'demo@goalvest.com';
-const DEMO_PASSWORD = 'Demo@1234';
-const AUTH_KEY      = 'wp_auth';
+import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
+         signOut, updateProfile, onAuthStateChanged, User } from '@angular/fire/auth';
 
 export interface AuthUser {
   email: string;
   name: string;
-  avatar?: string;
+  uid: string;
 }
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  private auth   = inject(Auth);
+  private router = inject(Router);
+
   readonly isAuthenticated = signal(false);
   readonly currentUser     = signal<AuthUser | null>(null);
+  readonly authLoading     = signal(true);
 
-  constructor(private router: Router) {
-    const stored = localStorage.getItem(AUTH_KEY);
-    if (stored) {
-      const user = JSON.parse(stored) as AuthUser;
-      this.isAuthenticated.set(true);
-      this.currentUser.set(user);
-    }
+  constructor() {
+    // Listen to Firebase auth state changes
+    onAuthStateChanged(this.auth, (user: User | null) => {
+      if (user) {
+        this.isAuthenticated.set(true);
+        this.currentUser.set({
+          uid:   user.uid,
+          email: user.email ?? '',
+          name:  user.displayName ?? user.email?.split('@')[0] ?? 'User',
+        });
+      } else {
+        this.isAuthenticated.set(false);
+        this.currentUser.set(null);
+      }
+      this.authLoading.set(false);
+    });
   }
 
-  login(email: string, password: string): boolean {
-    if (email === DEMO_EMAIL && password === DEMO_PASSWORD) {
-      const user: AuthUser = { email, name: 'Alex Morgan', avatar: '' };
-      localStorage.setItem(AUTH_KEY, JSON.stringify(user));
-      this.isAuthenticated.set(true);
-      this.currentUser.set(user);
-      return true;
-    }
-    return false;
+  async login(email: string, password: string): Promise<void> {
+    await signInWithEmailAndPassword(this.auth, email, password);
   }
 
-  logout(): void {
-    localStorage.removeItem(AUTH_KEY);
-    this.isAuthenticated.set(false);
-    this.currentUser.set(null);
+  async register(name: string, email: string, password: string): Promise<void> {
+    const cred = await createUserWithEmailAndPassword(this.auth, email, password);
+    await updateProfile(cred.user, { displayName: name });
+    // update signal immediately so header shows correct name
+    this.currentUser.set({ uid: cred.user.uid, email, name });
+  }
+
+  async logout(): Promise<void> {
+    await signOut(this.auth);
     this.router.navigate(['/login']);
   }
 }
