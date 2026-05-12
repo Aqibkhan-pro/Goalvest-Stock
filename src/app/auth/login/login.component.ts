@@ -71,13 +71,13 @@ import { AuthService } from '../../core/services/auth.service';
             <p>Sign in to your Goalvest Stock account</p>
           </div>
 
-          <div class="demo-badge">
+          <!-- <div class="demo-badge">
             <span class="material-icons">info</span>
             <div>
               <strong>Demo Account</strong>
               <span>demo&#64;goalvest.com / Demo&#64;1234</span>
             </div>
-          </div>
+          </div> -->
 
           <form (ngSubmit)="login()" #form="ngForm" class="login-form">
             <div class="form-group">
@@ -349,8 +349,8 @@ import { AuthService } from '../../core/services/auth.service';
   `]
 })
 export class LoginComponent {
-  email    = 'demo@goalvest.com';
-  password = 'Demo@1234';
+  email    = '';
+  password = '';
   error    = signal('');
   loading  = signal(false);
   showPwd  = signal(false);
